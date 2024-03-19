@@ -6,7 +6,7 @@ DIR_SRC = srcs/
 
 CC = cc 
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 
 #-pthread -fsanitize=thread
 
