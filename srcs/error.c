@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 16:18:40 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/19 17:30:27 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/20 17:20:42 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	init_data(t_data *data, char **argv)
 	data->time_to_die = ft_atoi(argv[2]) * 1000;
 	data->time_to_eat = ft_atoi(argv[3]) * 1000;
 	data->time_to_sleep = ft_atoi(argv[4]) * 1000;
+	data->so_dead = 0;
 	if (!data->philo_nb || !data->time_to_die || !data->time_to_sleep
 		|| !data->time_to_eat)
 	{

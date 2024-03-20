@@ -8,7 +8,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -pthread -g
 
-#-pthread -fsanitize=thread
+#-fsanitize=thread
 
 RM = rm -f
 

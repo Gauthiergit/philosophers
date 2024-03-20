@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/19 17:40:29 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/20 19:17:29 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 #define RED	"\e[31m"
 #define GREEN	"\e[32m"
@@ -26,16 +27,21 @@
 typedef	struct s_data
 {
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	display;
+	pthread_mutex_t	check_dead;
 	int				philo_nb;
-	long int		time_to_die;
-	long int		time_to_sleep;
-	long int		time_to_eat;
+	long long int	time_to_die;
+	long long int	time_to_sleep;
+	long long int	time_to_eat;
+	int				so_dead;
 }	t_data;
 
 typedef	struct s_philo
 {
-	int			thread_id;
-	t_data		*data;
+	int				thread_id;
+	struct timeval	start_time;
+	struct timeval	current_time;
+	t_data			*data;
 }	t_philo;
 
 /* typedef struct	s_data
@@ -55,11 +61,15 @@ void				*philo_routine(void *infos);
 /* error.c */
 void				check_error(int argc, char **argv, t_data *data);
 
+/* utils_2.c */
+long long	timeval_diff(struct timeval *start, struct timeval *end);
+long long	cur_time(t_philo *philo);
+
 /* utils.c */
-unsigned long int	ft_atoi(const char *str);
-void				init_mutex(t_data *data);
-void				init_philo(t_data *data, t_philo *philo, pthread_t *threads);
-void				waiting_treads(t_philo *philo, pthread_t *threads);
-void				free_philo(t_philo *philo, pthread_t *threads);
+long long int	ft_atoi(const char *str);
+void			init_mutex(t_data *data);
+void			init_philo(t_data *data, t_philo *philo, pthread_t *threads);
+void			waiting_treads(t_philo *philo, pthread_t *threads);
+void			free_philo(t_philo *philo, pthread_t *threads);
 
 #endif
