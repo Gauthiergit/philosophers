@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:11 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/20 19:09:08 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/21 16:04:39 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ void	init_mutex(t_data *data)
 		pthread_mutex_init(&data->forks[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(&data->display, NULL);
+	pthread_mutex_init(&data->eating, NULL);
 	pthread_mutex_init(&data->check_dead, NULL);
+	pthread_mutex_init(&data->sleeping, NULL);
+	pthread_mutex_init(&data->thinking, NULL);
 }
 
 void	init_philo(t_data *data, t_philo *philo, pthread_t *threads)
@@ -85,7 +87,9 @@ void	free_philo(t_philo *philo, pthread_t *threads)
 		i++;
 	}
 	pthread_mutex_destroy(&philo->data->check_dead);
-	pthread_mutex_destroy(&philo->data->display);
+	pthread_mutex_destroy(&philo->data->eating);
+	pthread_mutex_destroy(&philo->data->sleeping);
+	pthread_mutex_destroy(&philo->data->thinking);
 	free(philo->data->forks);
 	free(philo);
 	free(threads);

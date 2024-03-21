@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/20 19:17:29 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/21 16:41:52 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@
 typedef	struct s_data
 {
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	display;
+	pthread_mutex_t	eating;
 	pthread_mutex_t	check_dead;
+	pthread_mutex_t	sleeping;
+	pthread_mutex_t	thinking;
 	int				philo_nb;
 	long long int	time_to_die;
 	long long int	time_to_sleep;
 	long long int	time_to_eat;
 	int				so_dead;
+	struct timeval	start_pg;
 }	t_data;
 
 typedef	struct s_philo
