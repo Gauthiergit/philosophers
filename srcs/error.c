@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 16:18:40 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/20 17:20:42 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/22 15:01:17 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ void	init_data(t_data *data, char **argv)
 	data->forks = malloc(data->philo_nb * sizeof(pthread_mutex_t));
 	if (!data->forks)
 		exit(1);
+	data->philo = malloc(data->philo_nb * sizeof(t_philo));
+	if (!data->philo)
+	init_mutex(data);
+	init_philo(data);
 }
 
 void	check_error(int argc, char **argv, t_data *data)
