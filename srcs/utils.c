@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:11 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/22 17:36:31 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/25 18:38:10 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	init_mutex(t_data *data)
 		pthread_mutex_init(&data->forks[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(&data->mutex, NULL);
+	pthread_mutex_init(&data->display, NULL);
+	pthread_mutex_init(&data->dead, NULL);
+	pthread_mutex_init(&data->time, NULL);
+	pthread_mutex_init(&data->time2, NULL);
 }
 
 void	init_philo(t_data *data)
@@ -68,8 +71,9 @@ void	start_routine(t_data *data, pthread_t *threads)
 	while (i < data->philo_nb)
 	{
 		pthread_create(&threads[i], NULL, philo_routine, (void*)&data->philo[i]);
+		pthread_mutex_lock(&data->display);
 		printf("%sCreation du Philosophe %d%s\n", GREEN, data->philo[i].thread_id, NC);
-		usleep(1000);
+		pthread_mutex_unlock(&data->display);
 		i++;
 	}
 }
@@ -82,7 +86,9 @@ void	waiting_treads(t_data *data, pthread_t *threads)
 	while (i < data->philo_nb)
 	{
 		pthread_join(threads[i], NULL);
+		pthread_mutex_lock(&data->display);
 		printf("%sUnion du Philosophe %d%s\n", GREEN, data->philo[i].thread_id, NC);
+		pthread_mutex_unlock(&data->display);
 		i++;
 	}
 }
@@ -97,7 +103,10 @@ void	free_philo(t_data *data, pthread_t *threads)
 		pthread_mutex_destroy(&data->forks[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&data->mutex);
+	pthread_mutex_destroy(&data->display);
+	pthread_mutex_destroy(&data->dead);
+	pthread_mutex_destroy(&data->time);
+	pthread_mutex_destroy(&data->time2);
 	free(data->forks);
 	free(data->philo);
 	free(threads);

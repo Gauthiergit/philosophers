@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/22 18:31:50 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/25 18:37:44 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@
 typedef	struct s_data
 {
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	mutex;
+	pthread_mutex_t	display;
+	pthread_mutex_t	dead;
+	pthread_mutex_t	time;
+	pthread_mutex_t	time2;
 	int				philo_nb;
 	long long int	time_to_die;
 	long long int	time_to_sleep;
 	long long int	time_to_eat;
 	int				so_dead;
-	int				dead_id;
 	struct s_philo	*philo;
 	struct timeval	start_pg;
 }	t_data;
@@ -66,7 +68,7 @@ void				*philo_routine(void *infos);
 void				check_error(int argc, char **argv, t_data *data);
 
 /* utils_2.c */
-void		*philo_monitoring(t_data *data, pthread_t *threads);
+void		*philo_monitoring(t_data *data);
 void		check_last_meal(t_philo *philo);
 long long	timeval_diff(struct timeval *start, struct timeval *end);
 long long	cur_time(t_philo *philo);

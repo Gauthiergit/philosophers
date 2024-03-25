@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 16:18:40 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/22 15:01:17 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/25 13:02:21 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	init_data(t_data *data, char **argv)
 		exit(1);
 	data->philo = malloc(data->philo_nb * sizeof(t_philo));
 	if (!data->philo)
+		exit(1);
 	init_mutex(data);
 	init_philo(data);
 }
@@ -69,41 +70,3 @@ void	check_error(int argc, char **argv, t_data *data)
 	}
 	init_data(data, argv);
 }
-
-/* void	ft_clear_philo(t_philo **lst)
-{
-	t_philo	*current;
-	t_philo	*futur;
-
-	current = *lst;
-	if (!lst || !(*lst))
-		return ;
-	while (current->next != *lst)
-	{
-		futur = current->next;
-		pthread_mutex_destroy(&current->lock);
-		free(current);
-		current = futur;
-	}
-	free(current);
-	*lst = NULL;
-} */
-
-/* void	ft_clear_fork(t_fork **lst)
-{
-	t_fork	*current;
-	t_fork	*futur;
-
-	current = *lst;
-	if (!lst || !(*lst))
-		return ;
-	while (current->next != *lst)
-	{
-		futur = current->next;
-		pthread_mutex_destroy(&current->lock);
-		free(current);
-		current = futur;
-	}
-	free(current);
-	*lst = NULL;
-} */
