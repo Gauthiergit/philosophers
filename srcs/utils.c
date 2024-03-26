@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:11 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/25 18:38:10 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/26 17:54:28 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,20 @@ long long int	ft_atoi(const char *str)
 	return (result);
 }
 
+int	ft_tablen(int *tab)
+{
+	int	i;
+	
+	if (!tab)
+		return (0);
+	if (tab[0] == 0)
+		return (0);
+	i = 0;
+	while (tab[i] != 0)
+		i++;
+	return (i);
+}
+
 void	init_mutex(t_data *data)
 {
 	int	i;
@@ -40,7 +54,7 @@ void	init_mutex(t_data *data)
 	pthread_mutex_init(&data->display, NULL);
 	pthread_mutex_init(&data->dead, NULL);
 	pthread_mutex_init(&data->time, NULL);
-	pthread_mutex_init(&data->time2, NULL);
+	pthread_mutex_init(&data->eat, NULL);
 }
 
 void	init_philo(t_data *data)
@@ -50,10 +64,11 @@ void	init_philo(t_data *data)
 	i = 0;
 	while (i < data->philo_nb)
 	{
-		data->philo[i].thread_id = i;
+		data->philo[i].thread_id = i + 1;
 		data->philo[i].right_fork = i;
 		data->philo[i].left_fork = (i + 1) % data->philo_nb;
 		data->philo[i].data = data;
+		data->philo[i].count_eat = data->eat_nb;
 		data->philo[i].start_time.tv_sec = 0;
 		data->philo[i].start_time.tv_usec = 0;
 		data->philo[i].current_time.tv_sec = 0;
@@ -106,8 +121,9 @@ void	free_philo(t_data *data, pthread_t *threads)
 	pthread_mutex_destroy(&data->display);
 	pthread_mutex_destroy(&data->dead);
 	pthread_mutex_destroy(&data->time);
-	pthread_mutex_destroy(&data->time2);
+	pthread_mutex_destroy(&data->eat);
 	free(data->forks);
 	free(data->philo);
+	free(data->tab_end);
 	free(threads);
 }

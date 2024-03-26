@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/25 18:37:44 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/26 17:39:02 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <string.h>
 
 #define RED	"\e[31m"
 #define GREEN	"\e[32m"
@@ -30,8 +31,11 @@ typedef	struct s_data
 	pthread_mutex_t	display;
 	pthread_mutex_t	dead;
 	pthread_mutex_t	time;
-	pthread_mutex_t	time2;
+	pthread_mutex_t	eat;
 	int				philo_nb;
+	int				finish;
+	int				eat_nb;
+	int				*tab_end;
 	long long int	time_to_die;
 	long long int	time_to_sleep;
 	long long int	time_to_eat;
@@ -45,20 +49,11 @@ typedef	struct s_philo
 	int				thread_id;
 	int				right_fork;
 	int				left_fork;
+	int				count_eat;
 	struct timeval	start_time;
 	struct timeval	current_time;
 	t_data			*data;
 }	t_philo;
-
-/* typedef struct	s_data
-{
-	long int	philo_nb;
-	long int	time_to_die;
-	long int	time_to_sleep;
-	long int	time_to_eat;
-	t_philo		*lst_philo;
-	t_fork		*lst_fork;
-}	t_data; */
 
 /* srcs */
 /* philosopher.c */
@@ -82,5 +77,7 @@ void			init_philo(t_data *data);
 void			start_routine(t_data *data, pthread_t *threads);
 void			waiting_treads(t_data *data, pthread_t *threads);
 void			free_philo(t_data *data, pthread_t *threads);
+int				ft_tablen(int *tab);
+void			check_eat_nb(t_data *data);
 
 #endif

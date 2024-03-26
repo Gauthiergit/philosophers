@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 19:09:52 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/25 18:41:10 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/26 17:39:32 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,9 @@ long long	cur_time(t_philo *philo)
 
 	cur_usec = 0;
 	cur_millisec = 0;
-	pthread_mutex_lock(&philo->data->time2);
 	gettimeofday(&philo->current_time, NULL);
 	cur_usec = timeval_diff(&philo->data->start_pg, &philo->current_time);
 	cur_millisec = cur_usec  / 1000;
-	pthread_mutex_unlock(&philo->data->time2);
 	return (cur_millisec);
 }
 
@@ -40,10 +38,8 @@ void	check_last_meal(t_philo *philo)
 	pthread_mutex_lock(&philo->data->time);
 	if (philo->start_time.tv_sec)
 	{
-		pthread_mutex_lock(&philo->data->time2);
 		gettimeofday(&philo->current_time, NULL);
 		elapsed_time = timeval_diff(&philo->start_time, &philo->current_time);
-		pthread_mutex_unlock(&philo->data->time2);
 		if (elapsed_time > philo->data->time_to_die)
 		{
 			pthread_mutex_lock(&philo->data->display);
@@ -64,6 +60,13 @@ void	*philo_monitoring(t_data *data)
 		i = 0;
 		while (i < data->philo_nb)
 		{
+			pthread_mutex_lock(&data->eat);
+			if (data->finish)
+			{
+				pthread_mutex_unlock(&data->eat);
+				return (NULL);
+			}
+			pthread_mutex_unlock(&data->eat);
 			pthread_mutex_lock(&data->dead);
 			check_last_meal(&data->philo[i]);
 			if (data->so_dead)
@@ -77,6 +80,29 @@ void	*philo_monitoring(t_data *data)
 	}
 }
 
+void	check_eat_nb(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->philo_nb)
+	{
+		if (data->philo[i].count_eat == 0)
+			memset(data->tab_end + i, i + 1, 1);
+		i++;
+	}
+	if (!data->finish)
+	{
+		if (ft_tablen(data->tab_end) == data->philo_nb)
+		{
+			data->finish = 1;
+			pthread_mutex_lock(&data->display);
+			printf("%sPhilo have finished eating !!%s\n", GREEN, NC);
+			pthread_mutex_unlock(&data->display);
+		}
+	}
+}
+
 int	check_if_dead(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->data->dead);
@@ -86,5 +112,12 @@ int	check_if_dead(t_philo *philo)
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->data->dead);
+	pthread_mutex_lock(&philo->data->eat);
+	if (philo->data->finish)
+	{
+		pthread_mutex_unlock(&philo->data->eat);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->eat);
 	return (0);
 }

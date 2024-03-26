@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:40:43 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/25 17:50:03 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/26 18:05:47 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ void	eating(t_philo *philo)
 	gettimeofday(&philo->start_time, NULL);
 	pthread_mutex_unlock(&philo->data->time);
 	usleep(philo->data->time_to_eat);
+	pthread_mutex_lock(&philo->data->eat);
+	if (philo->data->eat_nb)
+	{
+		philo->count_eat--;
+		check_eat_nb(philo->data);
+	}
+	check_eat_nb(philo->data);
+	pthread_mutex_unlock(&philo->data->eat);
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 }
@@ -125,5 +133,6 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-// accélérer l'affichage de la mort
-// gerer le nombres de fois ou le philo mange 
+
+/* modifier la façon de regarder si les tous les philo on finis de manger
+en incrémentant mon finish et quand il vaut le philo_nb */
