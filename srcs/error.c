@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 16:18:40 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 13:26:58 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/27 16:00:00 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,41 +26,23 @@ int	check_cara(char *str)
 	return (0);
 }
 
-void	init_data(t_data *data, char **argv)
+void	check_sup_zero(t_data *data)
 {
-	data->philo_nb = ft_atoi(argv[1]);
-	data->time_to_die = ft_atoi(argv[2]) * 1000;
-	data->time_to_eat = ft_atoi(argv[3]) * 1000;
-	data->time_to_sleep = ft_atoi(argv[4]) * 1000;
-	if (argv[5])
-		data->eat_nb = ft_atoi(argv[5]);
-	else
-		data->eat_nb = 0;
-	data->so_dead = 0;
-	data->finish = 0;
 	if (!data->philo_nb || !data->time_to_die || !data->time_to_sleep
 		|| !data->time_to_eat)
 	{
 		printf("Numbers must be greater than zero\n");
 		exit(1);
 	}
-	data->forks = malloc(data->philo_nb * sizeof(pthread_mutex_t));
-	if (!data->forks)
-		exit(1);
-	data->philo = malloc(data->philo_nb * sizeof(t_philo));
-	if (!data->philo)
-		exit(1);
-	init_mutex(data);
-	init_philo(data);
 }
 
-void	check_error(int argc, char **argv, t_data *data)
+void	check_error(int argc, char **argv)
 {
 	int	i;
 
 	if (argc < 5 || argc > 6)
 	{
-		printf("You have to use at least 4 arguments and no more than 5.\n");
+		printf("Usage: At least 4 arguments and no more than 5.\n");
 		exit(1);
 	}
 	i = 1;
@@ -73,5 +55,4 @@ void	check_error(int argc, char **argv, t_data *data)
 		}
 		i++;
 	}
-	init_data(data, argv);
 }

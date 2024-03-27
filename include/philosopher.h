@@ -6,26 +6,25 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 13:29:19 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/27 16:06:28 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef PHILOSOPHER_H
-#define PHILOSOPHER_H
+#ifndef PHILOSOPHER_H
+# define PHILOSOPHER_H
 
-#include <stdio.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <string.h>
+# include <stdio.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/time.h>
 
-#define RED	"\e[31m"
-#define GREEN	"\e[32m"
-#define NC	"\e[0m"
-#define YELLOW	"\e[33m"
+# define RED	"\e[31m"
+# define GREEN	"\e[32m"
+# define NC	"\e[0m"
+# define YELLOW	"\e[33m"
 
-typedef	struct s_data
+typedef struct s_data
 {
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	display;
@@ -43,7 +42,7 @@ typedef	struct s_data
 	struct timeval	start_pg;
 }	t_data;
 
-typedef	struct s_philo
+typedef struct s_philo
 {
 	int				thread_id;
 	int				right_fork;
@@ -55,26 +54,37 @@ typedef	struct s_philo
 }	t_philo;
 
 /* srcs */
-/* philosopher.c */
-void				*philo_routine(void *infos);
+/* actions.c */
+int				taking_forks(t_philo *philo);
+void			eating(t_philo *philo);
+void			sleeping(t_philo *philo);
 
 /* error.c */
-void				check_error(int argc, char **argv, t_data *data);
+void			check_error(int argc, char **argv);
+int				check_cara(char *str);
+void			check_sup_zero(t_data *data);
 
-/* utils_2.c */
-void		*philo_monitoring(t_data *data);
-void		check_last_meal(t_philo *philo);
-long long	timeval_diff(struct timeval *start, struct timeval *end);
-long long	cur_time(t_philo *philo);
-int			check_if_stop(t_philo *philo);
-void		check_eat_nb(t_philo *philo);
-
-/* utils.c */
-long long int	ft_atoi(const char *str);
+/* init.c */
+void			init_data(t_data *data, char **argv);
 void			init_mutex(t_data *data);
 void			init_philo(t_data *data);
+
+/* monitoring.c */
+void			*philo_monitoring(t_data *data);
+void			check_last_meal(t_philo *philo);
+int				check_if_stop(t_philo *philo);
+void			check_eat_nb(t_philo *philo);
+
+/* routine.c */
+void			*philo_routine(void *infos);
 void			start_routine(t_data *data, pthread_t *threads);
 void			waiting_treads(t_data *data, pthread_t *threads);
+
+/* utils.c */
+long long		cur_time(t_philo *philo);
+long long		timeval_diff(struct timeval *start, struct timeval *end);
+long long int	ft_atoi(const char *str);
 void			free_philo(t_data *data, pthread_t *threads);
+void			ft_display(t_philo *philo, const char *str, char *color);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:11 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 13:28:50 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/27 16:09:38 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/philosopher.h"
+#include "../include/philosopher.h"
 
 long long int	ft_atoi(const char *str)
 {
@@ -25,73 +25,6 @@ long long int	ft_atoi(const char *str)
 		i++;
 	}
 	return (result);
-}
-
-void	init_mutex(t_data *data)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < data->philo_nb)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
-	pthread_mutex_init(&data->display, NULL);
-	pthread_mutex_init(&data->dead, NULL);
-	pthread_mutex_init(&data->time, NULL);
-	pthread_mutex_init(&data->eat, NULL);
-}
-
-void	init_philo(t_data *data)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < data->philo_nb)
-	{
-		data->philo[i].thread_id = i + 1;
-		data->philo[i].right_fork = i;
-		data->philo[i].left_fork = (i + 1) % data->philo_nb;
-		data->philo[i].data = data;
-		data->philo[i].count_eat = data->eat_nb;
-		data->philo[i].start_time.tv_sec = 0;
-		data->philo[i].start_time.tv_usec = 0;
-		data->philo[i].current_time.tv_sec = 0;
-		data->philo[i].current_time.tv_usec = 0;
-		i++;
-	}
-}
-
-void	start_routine(t_data *data, pthread_t *threads)
-{
-	unsigned int	i;
-
-	i = 0;
-	gettimeofday(&data->start_pg, NULL);
-	while (i < data->philo_nb)
-	{
-		pthread_create(&threads[i], NULL, philo_routine, (void*)&data->philo[i]);
-		pthread_mutex_lock(&data->display);
-		printf("%sCreation du Philosophe %d%s\n", GREEN, data->philo[i].thread_id, NC);
-		pthread_mutex_unlock(&data->display);
-		i++;
-	}
-}
-
-void	waiting_treads(t_data *data, pthread_t *threads)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < data->philo_nb)
-	{
-		pthread_join(threads[i], NULL);
-		pthread_mutex_lock(&data->display);
-		printf("%sUnion du Philosophe %d%s\n", GREEN, data->philo[i].thread_id, NC);
-		pthread_mutex_unlock(&data->display);
-		i++;
-	}
 }
 
 void	free_philo(t_data *data, pthread_t *threads)
@@ -111,4 +44,34 @@ void	free_philo(t_data *data, pthread_t *threads)
 	free(data->forks);
 	free(data->philo);
 	free(threads);
+}
+
+void	ft_display(t_philo *philo, const char *str, char *color)
+{
+	pthread_mutex_lock(&philo->data->display);
+	printf("%s[%lld] Philosopher %d %s%s\n",
+		color, cur_time(philo), philo->thread_id, str, NC);
+	pthread_mutex_unlock(&philo->data->display);
+}
+
+long long	timeval_diff(struct timeval *start, struct timeval *end)
+{
+	long long	res;
+
+	res = (end->tv_sec - start->tv_sec) * 1000000LL;
+	res += (end->tv_usec - start->tv_usec);
+	return (res);
+}
+
+long long	cur_time(t_philo *philo)
+{
+	long long	cur_usec;
+	long long	cur_millisec;
+
+	cur_usec = 0;
+	cur_millisec = 0;
+	gettimeofday(&philo->current_time, NULL);
+	cur_usec = timeval_diff(&philo->data->start_pg, &philo->current_time);
+	cur_millisec = cur_usec / 1000;
+	return (cur_millisec);
 }

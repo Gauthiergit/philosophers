@@ -8,8 +8,6 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -pthread -g
 
-#-fsanitize=thread
-
 RM = rm -f
 
 SRCS = $(wildcard $(DIR_SRC)*.c)
