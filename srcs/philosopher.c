@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:40:43 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/26 18:05:47 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/27 13:31:24 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	taking_forks(t_philo *philo)
 	if (philo->thread_id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
-		if (!check_if_dead(philo))
+		if (!check_if_stop(philo))
 		{
 			pthread_mutex_lock(&philo->data->display);
 			printf("%s[%lld] Philosopher %d takes fork %d%s\n", YELLOW, cur_time(philo), philo->thread_id, philo->right_fork, NC);
@@ -27,7 +27,7 @@ int	taking_forks(t_philo *philo)
 	else
 	{
 		pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
-		if (!check_if_dead(philo))
+		if (!check_if_stop(philo))
 		{
 			pthread_mutex_lock(&philo->data->display);
 			printf("%s[%lld] Philosopher %d takes fork %d%s\n", YELLOW, cur_time(philo), philo->thread_id, philo->left_fork, NC);
@@ -38,7 +38,7 @@ int	taking_forks(t_philo *philo)
 	{
 		if (pthread_mutex_lock(&philo->data->forks[philo->left_fork]) != 0)
 			return (pthread_mutex_unlock(&philo->data->forks[philo->right_fork]), 1);
-		if (!check_if_dead(philo))
+		if (!check_if_stop(philo))
 		{
 			pthread_mutex_lock(&philo->data->display);
 			printf("%s[%lld] Philosopher %d takes fork %d%s\n", YELLOW, cur_time(philo), philo->thread_id, philo->left_fork, NC);
@@ -49,7 +49,7 @@ int	taking_forks(t_philo *philo)
 	{
 		if (pthread_mutex_lock(&philo->data->forks[philo->right_fork]) != 0)
 			return (pthread_mutex_unlock(&philo->data->forks[philo->left_fork]), 1);
-		if (!check_if_dead(philo))
+		if (!check_if_stop(philo))
 		{
 			pthread_mutex_lock(&philo->data->display);
 			printf("%s[%lld] Philosopher %d takes fork %d%s\n", YELLOW, cur_time(philo), philo->thread_id, philo->right_fork, NC);
@@ -72,9 +72,9 @@ void	eating(t_philo *philo)
 	if (philo->data->eat_nb)
 	{
 		philo->count_eat--;
-		check_eat_nb(philo->data);
+		if (philo->data->finish != philo->data->philo_nb)
+			check_eat_nb(philo);
 	}
-	check_eat_nb(philo->data);
 	pthread_mutex_unlock(&philo->data->eat);
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
@@ -93,22 +93,22 @@ void	*philo_routine(void *infos)
 	t_philo			*philo;
 	
 	philo = (t_philo*)infos;
-	while (!check_if_dead(philo))
+	while (!check_if_stop(philo))
 	{
-		if (check_if_dead(philo))
+		if (check_if_stop(philo))
 			return (NULL);
 		taking_forks(philo);
-		if (check_if_dead(philo))
+		if (check_if_stop(philo))
 		{
 			pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 			pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 			return (NULL);
 		}
 		eating(philo);
-		if (check_if_dead(philo))
+		if (check_if_stop(philo))
 			return (NULL);
 		sleeping(philo);
-		if (check_if_dead(philo))
+		if (check_if_stop(philo))
 			return (NULL);
 		pthread_mutex_lock(&philo->data->display);
 		printf("%s[%lld] Philosopher %d is thinking%s\n", YELLOW, cur_time(philo), philo->thread_id, NC);
@@ -134,5 +134,10 @@ int	main(int argc, char **argv)
 }
 
 
-/* modifier la façon de regarder si les tous les philo on finis de manger
-en incrémentant mon finish et quand il vaut le philo_nb */
+/* construire une fonction d'affichage et reduire pour reduire la fonction de prise de fourchettes
+
+elever l'affichage de la création de philo
+
+enlever l'affichage de l'union des philos
+
+reduire l'affichage de prise de fourchette a takes forks */

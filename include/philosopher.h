@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/26 17:39:02 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/27 13:29:19 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ typedef	struct s_data
 	pthread_mutex_t	dead;
 	pthread_mutex_t	time;
 	pthread_mutex_t	eat;
-	int				philo_nb;
-	int				finish;
-	int				eat_nb;
-	int				*tab_end;
+	unsigned int	philo_nb;
+	unsigned int	finish;
+	unsigned int	eat_nb;
 	long long int	time_to_die;
 	long long int	time_to_sleep;
 	long long int	time_to_eat;
@@ -67,8 +66,8 @@ void		*philo_monitoring(t_data *data);
 void		check_last_meal(t_philo *philo);
 long long	timeval_diff(struct timeval *start, struct timeval *end);
 long long	cur_time(t_philo *philo);
-int			check_if_dead(t_philo *philo);
-void		detach_threads(pthread_t *threads, t_data *data);
+int			check_if_stop(t_philo *philo);
+void		check_eat_nb(t_philo *philo);
 
 /* utils.c */
 long long int	ft_atoi(const char *str);
@@ -77,7 +76,5 @@ void			init_philo(t_data *data);
 void			start_routine(t_data *data, pthread_t *threads);
 void			waiting_treads(t_data *data, pthread_t *threads);
 void			free_philo(t_data *data, pthread_t *threads);
-int				ft_tablen(int *tab);
-void			check_eat_nb(t_data *data);
 
 #endif

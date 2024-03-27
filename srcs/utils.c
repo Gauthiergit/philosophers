@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:11 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/26 17:54:28 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/27 13:28:50 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,9 @@ long long int	ft_atoi(const char *str)
 	return (result);
 }
 
-int	ft_tablen(int *tab)
-{
-	int	i;
-	
-	if (!tab)
-		return (0);
-	if (tab[0] == 0)
-		return (0);
-	i = 0;
-	while (tab[i] != 0)
-		i++;
-	return (i);
-}
-
 void	init_mutex(t_data *data)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i < data->philo_nb)
@@ -59,7 +45,7 @@ void	init_mutex(t_data *data)
 
 void	init_philo(t_data *data)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i < data->philo_nb)
@@ -79,7 +65,7 @@ void	init_philo(t_data *data)
 
 void	start_routine(t_data *data, pthread_t *threads)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	gettimeofday(&data->start_pg, NULL);
@@ -95,7 +81,7 @@ void	start_routine(t_data *data, pthread_t *threads)
 
 void	waiting_treads(t_data *data, pthread_t *threads)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i < data->philo_nb)
@@ -110,7 +96,7 @@ void	waiting_treads(t_data *data, pthread_t *threads)
 
 void	free_philo(t_data *data, pthread_t *threads)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i < data->philo_nb)
@@ -124,6 +110,5 @@ void	free_philo(t_data *data, pthread_t *threads)
 	pthread_mutex_destroy(&data->eat);
 	free(data->forks);
 	free(data->philo);
-	free(data->tab_end);
 	free(threads);
 }
