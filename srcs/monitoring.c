@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:39:25 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 15:40:14 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/27 17:03:11 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ void	check_last_meal(t_philo *philo)
 	long long int	elapsed_time;
 
 	elapsed_time = 0;
+	if (philo->data->philo_nb == 1)
+	{
+		ft_display(philo, "died", RED);
+		philo->data->so_dead = 1;
+	}
 	pthread_mutex_lock(&philo->data->time);
 	if (philo->start_time.tv_sec)
 	{
