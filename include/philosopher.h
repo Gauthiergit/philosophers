@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 16:06:28 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/28 16:54:01 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_philo
 	int				right_fork;
 	int				left_fork;
 	int				count_eat;
+	int				full;
 	struct timeval	start_time;
 	struct timeval	current_time;
 	t_data			*data;

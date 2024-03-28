@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:37:41 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 16:09:02 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/28 18:02:20 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,7 @@ void	eating(t_philo *philo)
 	usleep(philo->data->time_to_eat);
 	pthread_mutex_lock(&philo->data->eat);
 	if (philo->data->eat_nb)
-	{
 		philo->count_eat--;
-		if (philo->data->finish != philo->data->philo_nb)
-			check_eat_nb(philo);
-	}
 	pthread_mutex_unlock(&philo->data->eat);
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);

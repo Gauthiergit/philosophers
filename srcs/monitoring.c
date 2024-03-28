@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:39:25 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 17:03:11 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/28 17:55:13 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,6 @@ void	*philo_monitoring(t_data *data)
 		i = 0;
 		while (i < data->philo_nb)
 		{
-			pthread_mutex_lock(&data->eat);
-			if (data->finish)
-			{
-				pthread_mutex_unlock(&data->eat);
-				return (NULL);
-			}
-			pthread_mutex_unlock(&data->eat);
 			pthread_mutex_lock(&data->dead);
 			check_last_meal(&data->philo[i]);
 			if (data->so_dead)
@@ -60,6 +53,14 @@ void	*philo_monitoring(t_data *data)
 				return (NULL);
 			}
 			pthread_mutex_unlock(&data->dead);
+			pthread_mutex_lock(&data->eat);
+			check_eat_nb(&data->philo[i]);
+			if (data->finish == data->philo_nb)
+			{
+				pthread_mutex_unlock(&data->eat);
+				return (NULL);
+			}
+			pthread_mutex_unlock(&data->eat);
 			i++;
 		}
 	}
@@ -67,13 +68,19 @@ void	*philo_monitoring(t_data *data)
 
 void	check_eat_nb(t_philo *philo)
 {
-	if (philo->count_eat == 0)
-		philo->data->finish++;
-	if (philo->data->finish == philo->data->philo_nb)
+	if (!philo->full)
 	{
-		pthread_mutex_lock(&philo->data->display);
-		printf("%sPhilo have finished eating !!%s\n", GREEN, NC);
-		pthread_mutex_unlock(&philo->data->display);
+		if (philo->count_eat == 0)
+		{
+			philo->full = 1;
+			philo->data->finish++;
+		}
+		if (philo->data->finish == philo->data->philo_nb)
+		{
+			pthread_mutex_lock(&philo->data->display);
+			printf("%sPhilo have finished eating !!%s\n", GREEN, NC);
+			pthread_mutex_unlock(&philo->data->display);
+		}
 	}
 }
 
