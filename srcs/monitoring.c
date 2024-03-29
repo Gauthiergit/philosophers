@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:39:25 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/29 11:36:50 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/29 16:59:26 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,19 @@ void	check_last_meal(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->time);
 }
 
+int	monito_eat(t_data *data, int i)
+{
+	pthread_mutex_lock(&data->eat);
+	check_eat_nb(&data->philo[i]);
+	if (data->finish == data->philo_nb)
+	{
+		pthread_mutex_unlock(&data->eat);
+		return (1);
+	}
+	pthread_mutex_unlock(&data->eat);
+	return (0);
+}
+
 void	*philo_monitoring(t_data *data)
 {
 	unsigned int	i;
@@ -53,14 +66,8 @@ void	*philo_monitoring(t_data *data)
 				return (NULL);
 			}
 			pthread_mutex_unlock(&data->dead);
-			pthread_mutex_lock(&data->eat);
-			check_eat_nb(&data->philo[i]);
-			if (data->finish == data->philo_nb)
-			{
-				pthread_mutex_unlock(&data->eat);
+			if (monito_eat(data, i))
 				return (NULL);
-			}
-			pthread_mutex_unlock(&data->eat);
 			i++;
 		}
 	}

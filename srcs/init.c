@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:30:53 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/29 15:24:16 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/29 16:35:12 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	init_philo(t_data *data)
 	while (i < data->philo_nb)
 	{
 		data->philo[i].thread_id = i + 1;
-		data->philo[i].right_fork = i % data->philo_nb;
-		data->philo[i].left_fork = (i - 1) % data->philo_nb;
+		data->philo[i].left_fork = i;
+		data->philo[i].right_fork = (i + 1) % data->philo_nb;
 		data->philo[i].data = data;
 		if (data->eat_nb)
 		{
