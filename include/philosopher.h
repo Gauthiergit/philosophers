@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:41:00 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/28 16:54:01 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/29 11:17:39 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_data
 	pthread_mutex_t	eat;
 	unsigned int	philo_nb;
 	unsigned int	finish;
-	unsigned int	eat_nb;
+	int				eat_nb;
 	long long int	time_to_die;
 	long long int	time_to_sleep;
 	long long int	time_to_eat;

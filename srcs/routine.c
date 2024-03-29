@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:36:04 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/27 16:08:40 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/29 15:19:06 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	*philo_routine(void *infos)
 	t_philo	*philo;
 
 	philo = (t_philo *)infos;
+	if (philo->thread_id % 2 == 0)
+		usleep(15000);
 	while (!check_if_stop(philo))
 	{
 		if (check_if_stop(philo))

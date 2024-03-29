@@ -6,7 +6,7 @@
 /*   By: gpeyre <gpeyre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:39:25 by gpeyre            #+#    #+#             */
-/*   Updated: 2024/03/28 17:55:13 by gpeyre           ###   ########.fr       */
+/*   Updated: 2024/03/29 11:36:50 by gpeyre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	*philo_monitoring(t_data *data)
 
 void	check_eat_nb(t_philo *philo)
 {
-	if (!philo->full)
+	if (philo->full == 0)
 	{
 		if (philo->count_eat == 0)
 		{
@@ -94,13 +94,10 @@ int	check_if_stop(t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->data->dead);
 	pthread_mutex_lock(&philo->data->eat);
-	if (philo->data->eat_nb)
+	if (philo->count_eat == 0)
 	{
-		if (philo->count_eat == 0)
-		{
-			pthread_mutex_unlock(&philo->data->eat);
-			return (1);
-		}
+		pthread_mutex_unlock(&philo->data->eat);
+		return (1);
 	}
 	pthread_mutex_unlock(&philo->data->eat);
 	return (0);
