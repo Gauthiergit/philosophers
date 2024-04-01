@@ -17,11 +17,18 @@ CFLAGS = -Wall -Wextra -Werror -pthread -g
 
 RM = rm -f
 
-SRCS = $(wildcard $(DIR_SRC)*.c)
+SRCS = srcs/actions.c \
+		srcs/error.c \
+		srcs/init.c \
+		srcs/monitoring.c \
+		srcs/philosopher.c \
+		srcs/routine.c \
+		srcs/utils.c
 
 OBJ = $(patsubst $(DIR_SRC)%.c,$(DIR_OBJ)%.o,$(SRCS))
 
 $(NAME): $(OBJ)
+		@clear
 		@echo "$(BOLD)$(BLUE)Compiling...$(RESET_COLOR)"
 		$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 		@echo "$(BOLD)$(GREEN)Compiling finished$(RESET_COLOR)"
